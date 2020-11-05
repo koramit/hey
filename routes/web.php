@@ -22,4 +22,4 @@ Route::get('/', function () {
 
 // WEBKOOKS
 Route::post('/webhooks/line', LINEWebhooksController::class);
-Route::post('/webhooks/telegram', TelegramWebhooksController::class);
+Route::post('/webhooks/telegram/{token}', TelegramWebhooksController::class);
