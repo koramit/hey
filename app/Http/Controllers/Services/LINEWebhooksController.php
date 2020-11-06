@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Services;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use LINE\LINEBot;
@@ -47,8 +48,8 @@ class LINEWebhooksController extends Controller
                         ->post('https://api.line.me/v2/bot/message/reply', [
                             'replyToken' => $event['replyToken'],
                             'messages' => [
-                                ['type' => 'text', 'text' => 'ขอบคุณที่ follow นะ'],
-                                ['type' => 'text', 'text' => 'เชิญลงทะเบียนก่อนเลย']
+                                ['type' => 'text', 'text' => "สวัสดี Koramit(blush)\nขอบคุณที่เป็นเพื่อนกับ Wordplease (hello)\n\nโปรดลงทะเบียนโดยการพิมพ์ verification code ส่งมาที่นี่เลย\n\n(scissors)"],
+                                // ['type' => 'text', 'text' => 'เชิญลงทะเบียนก่อนเลย']
                             ]
                         ]);
 
