@@ -43,22 +43,25 @@ class LINEWebhooksController extends Controller
 
     protected function follow($event)
     {
+        // get profile
+        $response = Http::withToken(config('services.line_bot.token'))
+                        ->get('https://api.line.me/v2/bot/profile/' . $event['source']['userId']);
+        // if ($response->ok()) {
+        Log::error($response->body());
+        // }
+
+        $profile = $response->json();
+
         // reply
         $response = Http::withToken(config('services.line_bot.token'))
                         ->post('https://api.line.me/v2/bot/message/reply', [
                             'replyToken' => $event['replyToken'],
                             'messages' => [
-                                ['type' => 'text', 'text' => "สวัสดี Koramit(blush)\nขอบคุณที่เป็นเพื่อนกับ Wordplease (hello)\n\nโปรดลงทะเบียนโดยการพิมพ์ verification code ส่งมาที่นี่เลย\n\n(scissors)"],
+                                ['type' => 'text', 'text' => "สวัสดี {$profile['displayName']} 😃\nขอบคุณที่เป็นเพื่อนกับ Wordplease 🐻\n\nโปรดลงทะเบียนโดยการพิมพ์ verification code ส่งมาที่นี่เลย\n\n✌️"],
                                 // ['type' => 'text', 'text' => 'เชิญลงทะเบียนก่อนเลย']
                             ]
                         ]);
 
-        // get profile
-        $response = Http::withToken(config('services.line_bot.token'))
-                        ->get('https://api.line.me/v2/bot/profile/' . $event['source']['userId']);
-        if ($response->ok()) {
-            Log::error($response->body());
-        }
 
         // save or update profile
     }
