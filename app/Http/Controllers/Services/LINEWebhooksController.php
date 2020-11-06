@@ -32,7 +32,7 @@ class LINEWebhooksController extends Controller
             } elseif ($event['type'] == 'unfollow') {
                 $this->unfollow($event);
             } elseif ($event['type'] == 'message') {
-                //
+                $this->message($event);
             } elseif ($event['type'] == 'unsend') {
                 //
             } else {
@@ -53,14 +53,12 @@ class LINEWebhooksController extends Controller
         $profile = $response->json();
 
         // reply
-        $response = Http::withToken(config('services.line_bot.token'))
-                        ->post('https://api.line.me/v2/bot/message/reply', [
-                            'replyToken' => $event['replyToken'],
-                            'messages' => [
-                                ['type' => 'text', 'text' => "สวัสดี {$profile['displayName']} 😃\nขอบคุณที่เป็นเพื่อนกับ Wordplease 🐻\n\nโปรดลงทะเบียนโดยการพิมพ์ verification code ส่งมาที่นี่เลย\n\n✌️"],
-                                // ['type' => 'text', 'text' => 'เชิญลงทะเบียนก่อนเลย']
-                            ]
-                        ]);
+        $messages = [];
+        $messages[] = [
+            'type' => 'text',
+            'text' => "สวัสดี {$profile['displayName']} 😃\nขอบคุณที่เป็นเพื่อนกับ Wordplease 🙏\n\nโปรดลงทะเบียนโดยการพิมพ์ verification code ส่งมาที่นี่เลย\n\n✌️"
+        ];
+        $this->replyMessage($event['replyToken'], $messages);
 
 
         // save or update profile
@@ -69,5 +67,25 @@ class LINEWebhooksController extends Controller
     protected function unfollow($event)
     {
         Log::error($event['source']['userId'] . ' unfollow');
+    }
+
+    protected function message($event)
+    {
+        $messages = [];
+        $messages[] = [
+            'type' => 'text',
+            'text' => strrev($event['message']['text'])
+        ];
+        $this->replyMessage($event['replyToken'], $messages);
+    }
+
+    protected function replyMessage($replyToken, $messageObjects)
+    {
+        // reply
+        $response = Http::withToken(config('services.line_bot.token'))
+                        ->post('https://api.line.me/v2/bot/message/reply', [
+                            'replyToken' => $replyToken,
+                            'messages' => $messageObjects
+                        ]);
     }
 }
