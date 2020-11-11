@@ -12,6 +12,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 class LINEWebhooksController extends Controller
 {
+    protected $client;
     /**
     * LINE request limit as of 2020-11-06
     * https://developers.line.biz/en/reference/messaging-api/#rate-limits
@@ -20,6 +21,8 @@ class LINEWebhooksController extends Controller
     public function __invoke()
     {
         Log::error(['app' => 'LINE', 'payload' => Request::all()]);
+
+        $this->client = Http::withToken(config('services.line_bot.token'));
 
         if (! Request::has('events')) { // this should never happend
             Log::error('LINE bad response');
@@ -85,6 +88,16 @@ class LINEWebhooksController extends Controller
         $response = Http::withToken(config('services.line_bot.token'))
                         ->post('https://api.line.me/v2/bot/message/reply', [
                             'replyToken' => $replyToken,
+                            'messages' => $messageObjects
+                        ]);
+    }
+
+    protected function pushMessage($userId, $messageObjects)
+    {
+        // push
+        $response = Http::withToken(config('services.line_bot.token'))
+                        ->post('https://api.line.me/v2/bot/message/push', [
+                            'to' => $userId,
                             'messages' => $messageObjects
                         ]);
     }

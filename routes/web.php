@@ -23,3 +23,13 @@ Route::get('/', function () {
 // WEBKOOKS
 Route::post('/webhooks/line', LINEWebhooksController::class);
 Route::post('/webhooks/telegram/{token}', TelegramWebhooksController::class);
+
+// MONITOR
+Route::post('/monitor', function () {
+    $request = \Request::all();
+    if (($request['token'] ?? null) !== env('MONITOR_TOKEN')) {
+        abort(401);
+    }
+
+    \Log::info(json_encode($request['data']));
+});
