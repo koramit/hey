@@ -30,6 +30,20 @@
             <li>
                 LAST KNOWN OFFLINE @ {{ $lastKnownOffline['timestamp'] ?? 'NONE' }}
             </li>
+            @else
+            <?php
+                $service = collect($services[$service]);
+                $reversed = $service->reverse();
+                $found = $reversed->search(function ($record) { return $record['status'] === 'ONLINE'; });
+                if ($found !== false) {
+                    $lastKnownOnline = $reversed[$found];
+                } else {
+                    $lastKnownOnline = null;
+                }
+            ?>
+            <li>
+                LAST KNOWN ONLINE @ {{ $lastKnownOnline['timestamp'] ?? 'NONE' }}
+            </li>
             @endif
         </ul>
         @endforeach
