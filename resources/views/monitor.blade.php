@@ -12,7 +12,7 @@
         <h3>{{ $service }}</h3>
         <ul>
             <?php $last = collect($services[$service])->last(); ?>
-            <li style="color: {{ $last['status'] == 'ONLINE' ? 'green':'red';  }}">{{ $last['status'] }}</li>
+            <li style="color: {{ $last['status'] == 'ONLINE' ? 'green':'red'  }};">{{ $last['status'] }}</li>
             <li>{{ $last['timestamp'] }}</li>
         </ul>
         @endforeach
