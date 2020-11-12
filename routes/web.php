@@ -34,7 +34,7 @@ Route::post('/monitor', function () {
 
     \Log::info(json_encode($request['data']));
 
-    $services = \Cache::get('services', collect([]));
+    $services = \Cache::get('services', collect(['valve' => [], 'ad' => [], 'scabbers' => []]));
 
     foreach (['valve', 'ad', 'scabbers'] as $service) {
         $services[$service]['timestamp'] = $request['data']['timestamp'];
