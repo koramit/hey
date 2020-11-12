@@ -32,6 +32,8 @@ Route::post('/monitor', function () {
         abort(401);
     }
 
+    \Log::info(json_encode($request['data']));
+
     $services = \Cache::get('services', collect([]));
 
     foreach (['valve', 'ad', 'scabbers'] as $service) {
