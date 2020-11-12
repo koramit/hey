@@ -37,9 +37,15 @@ Route::post('/monitor', function () {
     $services = \Cache::get('services', ['valve' => [], 'ad' => [], 'scabbers' => []]);
 
     foreach (['valve', 'ad', 'scabbers'] as $service) {
-        $services[$service]['timestamp'] = $request['data']['timestamp'];
-        $services[$service]['status'] = $request['data'][$service]['status'];
-        $services[$service]['error'] = $request['data'][$service]['error'] ?? null;
+        $services[$service][] = [
+            'timestamp' => $request['data']['timestamp'],
+            'status' => $request['data'][$service]['status'],
+            'error' => $request['data'][$service]['error'] ?? null,
+        ];
+        
+        // $services[$service]['timestamp'] = $request['data']['timestamp'];
+        // $services[$service]['status'] = $request['data'][$service]['status'];
+        // $services[$service]['error'] = $request['data'][$service]['error'] ?? null;
     }
 
     \Log::info($services);
