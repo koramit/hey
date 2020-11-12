@@ -24,7 +24,7 @@
                 if ($found !== false) {
                     $lastKnownOffline = $reversed[$found];
                 } else {
-                    $lastKnownOffline = null
+                    $lastKnownOffline = null;
                 }
             ?>
             <li>
