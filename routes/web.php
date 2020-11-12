@@ -42,22 +42,10 @@ Route::post('/monitor', function () {
             'status' => $request['data'][$service]['status'],
             'error' => $request['data'][$service]['error'] ?? null,
         ];
-        
-        // $services[$service]['timestamp'] = $request['data']['timestamp'];
-        // $services[$service]['status'] = $request['data'][$service]['status'];
-        // $services[$service]['error'] = $request['data'][$service]['error'] ?? null;
     }
-
-    \Log::info($services);
     \Cache::put('services', $services);
-
-    // $vavle = \Cache::get('vavle', collect([]));
-    // $ad = \Cache::get('ad', collect([]));
-    // $smuggle = \Cache::get('smuggle', collect([]));
-
-    \Log::info(json_encode($request['data']));
 });
 
 Route::get('/monitor', function () {
-    return \Cache::get('services', 'no data');
+    return view('monitor', ['services' => \Cache::get('services', [])]) ;
 });
