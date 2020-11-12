@@ -28,6 +28,7 @@ Route::post('/webhooks/telegram/{token}', TelegramWebhooksController::class);
 Route::post('/monitor', function () {
     $request = \Request::all();
     if (($request['token'] ?? null) !== env('MONITOR_TOKEN')) {
+        \Log::info('abort');
         abort(401);
     }
 
@@ -39,6 +40,7 @@ Route::post('/monitor', function () {
         $services[$service]['error'] = $request['data'][$service]['error'] ?? null;
     }
 
+    \Log::info($services);
     \Cache::put('services', $services);
 
     // $vavle = \Cache::get('vavle', collect([]));
