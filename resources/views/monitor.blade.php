@@ -20,10 +20,15 @@
             <?php
                 $service = collect($services[$service]);
                 $reversed = $service->reverse();
-                $lastKnownOffline = $reversed->search(function ($record) { return $record['status'] === 'OFFLINE'; });
+                $found = $reversed->search(function ($record) { return $record['status'] === 'OFFLINE'; });
+                if ($found !== false) {
+                    $lastKnownOffline = $reversed[$found];
+                } else {
+                    $lastKnownOffline = null
+                }
             ?>
             <li>
-                LAST KNOWN OFFLINE @ {{ $lastKnownOffline['timestamp'] }}
+                LAST KNOWN OFFLINE @ {{ $lastKnownOffline['timestamp'] ?? 'NONE' }}
             </li>
             @endif
         </ul>
