@@ -28,11 +28,12 @@ Route::post('/webhooks/telegram/{token}', TelegramWebhooksController::class);
 Route::post('/monitor', function () {
     $request = \Request::all();
     if (($request['token'] ?? null) !== env('MONITOR_TOKEN')) {
-        \Log::info('abort');
         abort(401);
     }
 
-    \Log::info(json_encode($request['data']));
+    if ($request['errors'] !== false) {
+        \Log::error(json_encode($request['errors']));
+    }
 
     $services = \Cache::get('services', ['valve' => [], 'ad' => [], 'scabbers' => []]);
 
