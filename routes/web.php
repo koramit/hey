@@ -36,7 +36,7 @@ Route::post('/monitor', function () {
 
     $services = \Cache::get('services', ['valve' => [], 'ad' => [], 'scabbers' => []]);
 
-    foreach (['valve', 'ad', 'scabbers'] as $service) {
+    foreach (['valve', 'ad', 'scabbers', 'smuggle'] as $service) {
         $services[$service][] = [
             'timestamp' => $request['data']['timestamp'],
             'status' => $request['data'][$service]['status'],

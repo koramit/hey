@@ -8,7 +8,7 @@
 </head>
 <body>
     @if($services)
-        @foreach(['valve', 'ad', 'scabbers'] as $service)
+        @foreach(['valve', 'ad', 'scabbers', 'smuggle'] as $service)
         <h3>{{ $service }}</h3>
         <ul>
             <?php $last = collect($services[$service])->last(); ?>
