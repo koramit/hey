@@ -14,7 +14,7 @@
             <?php $last = collect($services[$service])->last(); ?>
             <li>
                 <span style="color: {{ $last['status'] == 'ONLINE' ? 'green':'red'  }};">{{ $last['status'] }}</span>
-                <span> @ {{ $last['timestamp'] }}</span>
+                <span> @ {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $last['timestamp'])->diffForHumans(now()) }}</span>
             </li>
             @if($last['status'] == 'ONLINE')
             <?php
@@ -28,7 +28,12 @@
                 }
             ?>
             <li>
-                LAST KNOWN OFFLINE @ {{ $lastKnownOffline['timestamp'] ?? 'NONE' }}
+                LAST KNOWN OFFLINE @ 
+                @if($lastKnownOffline['timestamp'])
+                {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOffline['timestamp'])->diffForHumans(now()) }}
+                @else
+                NONE
+                @endif
             </li>
             @else
             <?php
@@ -42,7 +47,12 @@
                 }
             ?>
             <li>
-                LAST KNOWN ONLINE @ {{ $lastKnownOnline['timestamp'] ?? 'NONE' }}
+                LAST KNOWN ONLINE @ 
+                @if($lastKnownOnline['timestamp'])
+                {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOnline['timestamp'])->diffForHumans(now()) }}
+                @else
+                NONE
+                @endif
             </li>
             @endif
         </ul>
