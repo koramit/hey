@@ -29,7 +29,7 @@
             ?>
             <li>
                 LAST KNOWN OFFLINE @ 
-                @if($lastKnownOffline['timestamp'])
+                @if($lastKnownOffline['timestamp'] ?? null)
                 {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOffline['timestamp'])->diffForHumans(now()) }}
                 @else
                 NONE
@@ -48,7 +48,7 @@
             ?>
             <li>
                 LAST KNOWN ONLINE @ 
-                @if($lastKnownOnline['timestamp'])
+                @if($lastKnownOnline['timestamp'] ?? null)
                 {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOnline['timestamp'])->diffForHumans(now()) }}
                 @else
                 NONE
