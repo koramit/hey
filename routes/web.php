@@ -19,7 +19,6 @@ Route::get('/', function () {
     return 'Hey ! v0.1';
 });
 
-
 // WEBKOOKS
 Route::post('/webhooks/line', LINEWebhooksController::class);
 Route::post('/webhooks/telegram/{token}', TelegramWebhooksController::class);
@@ -37,7 +36,7 @@ Route::post('/monitor', function () {
 
     $services = \Cache::get('services', ['valve' => [], 'ad' => [], 'scabbers' => []]);
 
-    foreach (['valve', 'ad', 'scabbers', 'smuggle'] as $service) {
+    foreach (['valve', 'ad', 'scabbers', 'smuggle', 'WPMED'] as $service) {
         $services[$service][] = [
             'timestamp' => $request['data']['timestamp'],
             'status' => $request['data'][$service]['status'],
@@ -48,5 +47,5 @@ Route::post('/monitor', function () {
 });
 
 Route::get('/monitor', function () {
-    return view('monitor', ['services' => \Cache::get('services', [])]) ;
+    return view('monitor', ['services' => \Cache::get('services', [])]);
 });
