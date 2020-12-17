@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    @if($rescords)
+    @if($records)
         @foreach($services as $service)
             <h3>{{ $service }}</h3>
             <ul>
