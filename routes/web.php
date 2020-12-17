@@ -47,5 +47,5 @@ Route::post('/monitor', function () {
 });
 
 Route::get('/monitor', function () {
-    return view('monitor', ['services' => \Cache::get('services', [])]);
+    return view('monitor', ['services' => ['valve', 'ad', 'scabbers', 'smuggle', 'WPMED'], 'records' => \Cache::get('services', [])]);
 });

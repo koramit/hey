@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="th-TH">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <title>Monitors</title>
 </head>
+
 <body>
-    @if($services)
-        @foreach(['valve', 'ad', 'scabbers', 'smuggle'] as $service)
-        <h3>{{ $service }}</h3>
-        <ul>
-            <?php $last = collect($services[$service])->last(); ?>
-            <li>
-                <span style="color: {{ $last['status'] == 'ONLINE' ? 'green':'red'  }};">{{ $last['status'] }}</span>
-                <span> @ {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $last['timestamp'])->diffForHumans(now()) }}</span>
-            </li>
-            @if($last['status'] == 'ONLINE')
-            <?php
-                $service = collect($services[$service]);
+    @if($rescords)
+        @foreach($services as $service)
+            <h3>{{ $service }}</h3>
+            <ul>
+                <?php $last = collect($records[$service])->last(); ?>
+                <li>
+                    <span
+                        style="color: {{ $last['status'] == 'ONLINE' ? 'green':'red' }};">{{ $last['status'] }}</span>
+                    <span> @
+                        {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $last['timestamp'])->diffForHumans(now()) }}</span>
+                </li>
+                @if($last['status'] == 'ONLINE')
+                    <?php
+                $service = collect($records[$service]);
                 $reversed = $service->reverse();
                 $found = $reversed->search(function ($record) { return $record['status'] === 'OFFLINE'; });
                 if ($found !== false) {
@@ -27,17 +31,17 @@
                     $lastKnownOffline = null;
                 }
             ?>
-            <li>
-                LAST KNOWN OFFLINE @ 
-                @if($lastKnownOffline['timestamp'] ?? null)
-                {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOffline['timestamp'])->diffForHumans(now()) }}
+                    <li>
+                        LAST KNOWN OFFLINE @
+                        @if($lastKnownOffline['timestamp'] ?? null)
+                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOffline['timestamp'])->diffForHumans(now()) }}
+                        @else
+                            NONE
+                        @endif
+                    </li>
                 @else
-                NONE
-                @endif
-            </li>
-            @else
-            <?php
-                $service = collect($services[$service]);
+                    <?php
+                $service = collect($records[$service]);
                 $reversed = $service->reverse();
                 $found = $reversed->search(function ($record) { return $record['status'] === 'ONLINE'; });
                 if ($found !== false) {
@@ -46,17 +50,18 @@
                     $lastKnownOnline = null;
                 }
             ?>
-            <li>
-                LAST KNOWN ONLINE @ 
-                @if($lastKnownOnline['timestamp'] ?? null)
-                {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOnline['timestamp'])->diffForHumans(now()) }}
-                @else
-                NONE
+                    <li>
+                        LAST KNOWN ONLINE @
+                        @if($lastKnownOnline['timestamp'] ?? null)
+                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOnline['timestamp'])->diffForHumans(now()) }}
+                        @else
+                            NONE
+                        @endif
+                    </li>
                 @endif
-            </li>
-            @endif
-        </ul>
+            </ul>
         @endforeach
     @endif
 </body>
+
 </html>
