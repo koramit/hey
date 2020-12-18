@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Services\LINEWebhooksController;
 use App\Http\Controllers\Services\TelegramWebhooksController;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,27 +28,27 @@ Route::post('/webhooks/telegram/{token}', TelegramWebhooksController::class);
 
 // MONITOR
 Route::post('/monitor', function () {
-    $request = \Request::all();
+    $request = Request::all();
     if (($request['token'] ?? null) !== env('MONITOR_TOKEN')) {
         abort(401);
     }
 
     if ($request['errors'] !== false) {
-        \Log::error(json_encode($request['errors']));
+        Log::error(json_encode($request['errors']));
     }
 
-    $services = \Cache::get('services', ['valve' => [], 'ad' => [], 'scabbers' => []]);
+    $services = Cache::get('services', ['valve' => [], 'edu' => [], 'ad' => [], 'scabbers' => [], 'WPMED' => []]);
 
-    foreach (['valve', 'ad', 'scabbers', 'smuggle', 'WPMED'] as $service) {
+    foreach (['valve', 'edu', 'ad', 'scabbers', 'smuggle', 'WPMED'] as $service) {
         $services[$service][] = [
             'timestamp' => $request['data']['timestamp'],
             'status' => $request['data'][$service]['status'],
             'error' => $request['data'][$service]['error'] ?? null,
         ];
     }
-    \Cache::put('services', $services);
+    Cache::put('services', $services);
 });
 
 Route::get('/monitor', function () {
-    return view('monitor', ['services' => ['valve', 'ad', 'scabbers', 'smuggle', 'WPMED'], 'records' => \Cache::get('services', [])]);
+    return view('monitor', ['services' => ['valve', 'edu', 'ad', 'scabbers', 'smuggle', 'WPMED'], 'records' => Cache::get('services', [])]);
 });
