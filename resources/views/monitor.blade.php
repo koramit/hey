@@ -11,10 +11,14 @@
 <body>
     <h1>Lastest Check-in </h1>
     <small>(please refresh)</small>
-    <h2>wordplease
+    <h2>wordplease ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(1)->orderBy('timestamp', 'desc')->first()->online ? 'ONLINE' : 'OFFLINE' }}
+        ::
         {{ \App\Models\Uptime::whereMonitorServiceId(1)->orderBy('timestamp', 'desc')->first()->timestamp }}
     </h2>
-    <h2>smuggle
+    <h2>smuggle ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(2)->orderBy('timestamp', 'desc')->first()->online ? 'ONLINE' : 'OFFLINE' }}
+        ::
         {{ \App\Models\Uptime::whereMonitorServiceId(2)->orderBy('timestamp', 'desc')->first()->timestamp }}
     </h2>
 </body>

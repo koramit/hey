@@ -51,7 +51,7 @@ Route::post('/monitor', function () {
 });
 
 Route::get('/monitor', function () {
-    return view('monitor', ['services' => Cache::get('services', [])]);
+    return view('monitor');
 });
 
 Route::post('/uptimes', function () {
@@ -69,6 +69,7 @@ Route::post('/uptimes', function () {
     ]);
 
     if ($data['online'] && ($data['name'] === 'wordplease' || $data['name'] === 'smuggle')) {
+        Log::info($data);
         Log::error($data['name']);
     }
 });
