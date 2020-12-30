@@ -54,7 +54,7 @@ Route::get('/monitor', function () {
     return view('monitor', ['services' => Cache::get('services', [])]);
 });
 
-Route::post('uptimes', function () {
+Route::post('/uptimes', function () {
     $data = Request::all();
 
     $service = MonitorService::whereName($data['name'] ?? null)->first();
