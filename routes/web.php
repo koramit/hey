@@ -68,7 +68,7 @@ Route::post('/uptimes', function () {
         'timestamp' => now(),
     ]);
 
-    if ($data['online'] && ($data['name'] === 'wordplease' || $data['name'] === 'smuggle')) {
+    if (! $data['online'] && ($data['name'] === 'wordplease' || $data['name'] === 'smuggle')) {
         Log::info($data);
         Log::error($data['name']);
     }
