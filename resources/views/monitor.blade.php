@@ -9,59 +9,18 @@
 </head>
 
 <body>
-    @if($records)
-        @foreach($services as $service)
-            <h3>{{ $service }}</h3>
-            <ul>
-                <?php $last = collect($records[$service])->last(); ?>
-                <li>
-                    <span
-                        style="color: {{ $last['status'] == 'ONLINE' ? 'green':'red' }};">{{ $last['status'] }}</span>
-                    <span> @
-                        {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $last['timestamp'])->diffForHumans(now()) }}</span>
-                </li>
-                @if($last['status'] == 'ONLINE')
-                    <?php
-                $service = collect($records[$service]);
-                $reversed = $service->reverse();
-                $found = $reversed->search(function ($record) { return $record['status'] === 'OFFLINE'; });
-                if ($found !== false) {
-                    $lastKnownOffline = $reversed[$found];
-                } else {
-                    $lastKnownOffline = null;
-                }
-            ?>
-                    <li>
-                        LAST KNOWN OFFLINE @
-                        @if($lastKnownOffline['timestamp'] ?? null)
-                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOffline['timestamp'])->diffForHumans(now()) }}
-                        @else
-                            NONE
-                        @endif
-                    </li>
-                @else
-                    <?php
-                $service = collect($records[$service]);
-                $reversed = $service->reverse();
-                $found = $reversed->search(function ($record) { return $record['status'] === 'ONLINE'; });
-                if ($found !== false) {
-                    $lastKnownOnline = $reversed[$found];
-                } else {
-                    $lastKnownOnline = null;
-                }
-            ?>
-                    <li>
-                        LAST KNOWN ONLINE @
-                        @if($lastKnownOnline['timestamp'] ?? null)
-                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $lastKnownOnline['timestamp'])->diffForHumans(now()) }}
-                        @else
-                            NONE
-                        @endif
-                    </li>
-                @endif
-            </ul>
-        @endforeach
-    @endif
+    <h1>Lastest Check-in </h1>
+    <small>(please refresh)</small>
+    <h2>wordplease ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(1)->orderBy('timestamp', 'desc')->first()->online ? 'ONLINE' : 'OFFLINE' }}
+        ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(1)->orderBy('timestamp', 'desc')->first()->timestamp }}
+    </h2>
+    <h2>smuggle ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(2)->orderBy('timestamp', 'desc')->first()->online ? 'ONLINE' : 'OFFLINE' }}
+        ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(2)->orderBy('timestamp', 'desc')->first()->timestamp }}
+    </h2>
 </body>
 
 </html>
