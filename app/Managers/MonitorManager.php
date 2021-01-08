@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 class MonitorManager
 {
-    protected $service;
+    protected $uptime;
     protected $minutesMarkAsDown = 3;
 
     public function __construct(Uptime $uptime)
     {
-        $this->service = $uptime->monitorService;
+        $this->uptime = $uptime;
     }
 
     public function handleDowntime()
