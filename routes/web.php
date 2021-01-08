@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Services\LINEWebhooksController;
 use App\Http\Controllers\Services\TelegramWebhooksController;
+use App\Managers\MonitorManager;
+use App\Managers\WordpleaseMonitorManager;
 use App\Models\MonitorService;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,12 +40,16 @@ Route::post('/uptimes', function () {
         return;
     }
 
-    $service->uptimes()->create([
-        'online' => $data['online'],
-        'timestamp' => now(),
-    ]);
+    $uptime = $service->uptimes()->create([
+                'online' => $data['online'],
+                'timestamp' => now(),
+            ]);
 
     if (! $data['online'] && $service->notify) {
-        Log::error($data['name']);
+        if ($data['name'] == 'wordplease') {
+            (new WordpleaseMonitorManager($uptime))->handleDowntime();
+        } else {
+            (new MonitorManager($uptime))->handleDowntime();
+        }
     }
 });
