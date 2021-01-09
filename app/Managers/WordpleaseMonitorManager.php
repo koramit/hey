@@ -9,8 +9,12 @@ class WordpleaseMonitorManager extends MonitorManager
 {
     public function handleDowntime()
     {
-        if (! Http::withOptions(['verify' => false])->get(env('WORDPLEASE_BOOT_URL'))->ok()) {
-            Log::error('WORDPLEASE BOOT URL DOWN');
+        $boot = Http::withOptions(['verify' => false])->get(env('WORDPLEASE_BOOT_URL'));
+        Log::info($boot->body());
+        if (! $boot->ok()) {
+            Log::error('WORDPLEASE BOOT URL IS DOWN');
+        } else {
+            Log::error('WORDPLEASE BOOT URL IS UP');
         }
         parent::handleDowntime();
     }
