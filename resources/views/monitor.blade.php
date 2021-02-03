@@ -21,6 +21,11 @@
         ::
         {{ \App\Models\Uptime::whereMonitorServiceId(2)->orderBy('timestamp', 'desc')->first()->timestamp }}
     </h2>
+    <h2>lovesick ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(6)->orderBy('timestamp', 'desc')->first()->online ? 'ONLINE' : 'OFFLINE' }}
+        ::
+        {{ \App\Models\Uptime::whereMonitorServiceId(6)->orderBy('timestamp', 'desc')->first()->timestamp }}
+    </h2>
 </body>
 
 </html>
